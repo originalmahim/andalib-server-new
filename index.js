@@ -58,6 +58,20 @@ app.delete('/deleteorder/:id', async (req, res) => {
   }
 });
 
+app.patch('/cancelled/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const query = { _id: id };
+    const update = { $set: { status: "Cancelled" } }; 
+    const options = { returnOriginal: false }; 
+    const result = await ordersFile.updateOne(query, update, options);
+    res.send(result)
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 
 app.get('/', (req, res) => {
   res.send('Hello World its Bangladesh!')
