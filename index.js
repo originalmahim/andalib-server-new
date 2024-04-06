@@ -33,6 +33,16 @@ app.get('/allordersstate', async (req, res) => {
   }
 })
 
+ app.get('/orders', async (req, res) => {
+  try {
+    const result = await ordersFile.find().toArray();
+    res.send(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
  app.get('/orders/:date', async (req, res) => {
   try {
     const date = req.params.date;
