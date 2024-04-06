@@ -21,7 +21,17 @@ const client = new MongoClient(uri, {
 
 
 const ordersFile = client.db('TotalOrders').collection('OrdersInfos');
+const WebsitSummaryFile = client.db('TotalOrders').collection('WebsitSummary');
 
+app.get('/allordersstate', async (req, res) => {
+  try {
+    const result = await WebsitSummaryFile.find().toArray()
+    res.send(result)
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Internal Server Error')
+  }
+})
 
  app.get('/orders/:date', async (req, res) => {
   try {
