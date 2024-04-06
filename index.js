@@ -21,17 +21,7 @@ const client = new MongoClient(uri, {
 
 
 const ordersFile = client.db('TotalOrders').collection('OrdersInfos');
-const WebsitSummaryFile = client.db('TotalOrders').collection('WebsitSummary');
 
-app.get('/allordersstate', async (req, res) => {
-  try {
-    const result = await WebsitSummaryFile.find().toArray()
-    res.send(result)
-  } catch (error) {
-    console.log(error);
-    res.status(500).send('Internal Server Error')
-  }
-})
 
  app.get('/orders', async (req, res) => {
   try {
@@ -98,6 +88,19 @@ app.patch('/pending/:id', async (req, res) => {
     const id = req.params.id;
     const query = { _id: id };
     const update = { $set: { status: "Pending" } }; 
+    const options = { returnOriginal: false }; 
+    const result = await ordersFile.updateOne(query, update, options);
+    res.send(result)
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+app.patch('/delivered/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const query = { _id: id };
+    const update = { $set: { status: "Shipped" } }; 
     const options = { returnOriginal: false }; 
     const result = await ordersFile.updateOne(query, update, options);
     res.send(result)
