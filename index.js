@@ -22,16 +22,18 @@ const client = new MongoClient(uri, {
 
 const ordersFile = client.db('TotalOrders').collection('OrdersInfos');
 
-app.get('/orders', async (req,res) => {
-  try{
-           const users = await ordersFile.find().toArray();
-           res.send(users);
+
+ app.get('/orders/:date', async (req, res) => {
+  try {
+    const date = req.params.date;
+    const queary = { date: date };
+    const result = await ordersFile.find(queary).toArray();
+    res.send(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
   }
-  catch (error) {
-    console.log(error);
-    res.status(500).send('Internal Server Error')
-  }
- } )
+});
 
 app.get('/', (req, res) => {
   res.send('Hello World its Bangladesh!')
