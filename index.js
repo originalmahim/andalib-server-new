@@ -58,6 +58,18 @@ app.delete('/deleteorder/:id', async (req, res) => {
   }
 });
 
+app.get('/singleitem/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const query = { _id: id };
+    const result = await ordersFile.findOne(query);
+    res.send(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 app.patch('/cancelled/:id', async (req, res) => {
   try {
     const id = req.params.id;
