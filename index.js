@@ -20,6 +20,19 @@ const client = new MongoClient(uri, {
 });
 
 
+const ordersFile = client.db('TotalOrders').collection('OrdersInfos');
+
+app.get('/orders', async (req,res) => {
+  try{
+           const users = await ordersFile.find().toArray();
+           res.send(users);
+  }
+  catch (error) {
+    console.log(error);
+    res.status(500).send('Internal Server Error')
+  }
+ } )
+
 app.get('/', (req, res) => {
   res.send('Hello World its Bangladesh!')
 })
