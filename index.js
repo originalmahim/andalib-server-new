@@ -7,7 +7,7 @@ app.use(cors());
 app.use(express.json());
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.USER_NAME}:${process.env.PASSWORD}@cluster0.jfdcirb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -44,6 +44,20 @@ app.get('/allordersstate', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+
+app.delete('/deleteorder/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const query = { _id: id };
+    console.log(query);
+    const result = await ordersFile.deleteOne(query);
+    res.send(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 
 app.get('/', (req, res) => {
   res.send('Hello World its Bangladesh!')
